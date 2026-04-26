@@ -6,19 +6,30 @@ COPY . .
 RUN npm run build
 
 
-# ... (your builder stage stays the same) ...
+# ... (builder stage stays the same) ...
 
 FROM nginx:alpine
-# 1. Copy your built files
+
+# 1. Remove the default Nginx configuration
+RUN rm /etc/nginx/conf.d/default.conf
+
+# 2. Copy your built frontend files
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-# 2. Copy the template to the special 'templates' folder
-# Nginx's docker image will automatically run 'envsubst' on files in this folder
-COPY nginx.conf.template /etc/nginx/templates/default.conf.template
+# 3. Create a clean, direct config file instead of a template
+# This avoids any issues with environment variable substitution
+RUN echo "server { \
+    listen 8080; \
+    location / { \
+        root /usr/share/nginx/html; \
+        index index.html; \
+        try_files \$uri \$uri/ /index.html; \
+    } \
+}" > /etc/nginx/conf.d/default.conf
 
-# 3. Explicitly tell Cloud Run which port we are using
+# 4. Set environment variables for Cloud Run
 ENV PORT 8080
 EXPOSE 8080
 
-# 4. No need to change the CMD; the default nginx entrypoint 
-# handles the template substitution automatically!
+# Start Nginx
+CMD ["nginx", "-g", "daemon off;"]
