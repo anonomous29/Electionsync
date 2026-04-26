@@ -48,7 +48,7 @@ export default function CandidateComparer() {
     }
   }, [chatLog, isTyping]);
 
-  const handleAskAI = (e) => {
+  const handleAskAI = async (e) => {
     e.preventDefault();
     if (!query.trim()) return;
     
