@@ -74,27 +74,19 @@ def ask_ai():
         return jsonify({"error": "GEMINI_API_KEY environment variable is not set"}), 500
         
     try:
-        safety_settings = [
-            {"category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_ONLY_HIGH"},
-            {"category": "HARM_CATEGORY_HATE_SPEECH", "threshold": "BLOCK_ONLY_HIGH"},
-            {"category": "HARM_CATEGORY_SEXUALLY_EXPLICIT", "threshold": "BLOCK_ONLY_HIGH"},
-            {"category": "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold": "BLOCK_ONLY_HIGH"},
-        ]
+        response = model.generate_content(f"{AI_CONTEXT}\n\nUser Question: {user_query}")
         
-        response = model.generate_content(
-            f"{AI_CONTEXT}\n\nUser Question: {user_query}",
-            safety_settings=safety_settings
-        )
-        
-        # Handle cases where response might be blocked or empty
-        if response.candidates and response.candidates[0].content and response.candidates[0].content.parts:
-            answer_text = response.candidates[0].content.parts[0].text
+        # Try to get text from response
+        try:
+            answer_text = response.text
             return jsonify({"answer": answer_text})
-        else:
+        except ValueError:
+            # Response was blocked by safety filters
             return jsonify({"answer": "I can only answer questions about the election candidates and their manifestos. Please try asking something like 'Who is best for healthcare?'"}), 200
     except Exception as e:
-        print(f"Error calling Gemini API: {e}")
-        return jsonify({"answer": "I'm having trouble processing that question. Try asking about the candidates' positions on infrastructure, healthcare, or education."}), 200
+        import traceback
+        traceback.print_exc()
+        return jsonify({"answer": f"AI Error: {str(e)}"}), 200
 
 @app.route('/api/analyze-id-image', methods=['POST'])
 def analyze_id_image():
