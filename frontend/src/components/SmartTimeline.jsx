@@ -25,9 +25,9 @@ export default function SmartTimeline() {
             className={`mb-10 ml-6 md:ml-8 relative ${step.status === 'active' ? 'scale-105 origin-left' : ''}`}
           >
             <span className="absolute -left-[41px] md:-left-[49px] flex items-center justify-center w-8 h-8 rounded-full bg-white ring-4 ring-white shadow-sm">
-              {step.status === 'completed' && <CheckCircle2 className="w-6 h-6 text-civic-accent" />}
-              {step.status === 'active' && <Clock className="w-6 h-6 text-civic-primary animate-pulse" />}
-              {step.status === 'upcoming' && <Circle className="w-6 h-6 text-slate-300" />}
+              {step.status === 'completed' && <CheckCircle2 className="w-6 h-6 text-civic-accent" aria-hidden="true" />}
+              {step.status === 'active' && <Clock className="w-6 h-6 text-civic-primary animate-pulse" aria-hidden="true" />}
+              {step.status === 'upcoming' && <Circle className="w-6 h-6 text-slate-300" aria-hidden="true" />}
             </span>
             <div className={`p-5 rounded-xl shadow-sm border ${step.status === 'active' ? 'bg-blue-50 border-blue-200' : 'bg-white border-slate-100'}`}>
               <span className={`text-xs font-bold uppercase tracking-wider mb-1 block ${step.status === 'active' ? 'text-civic-primary' : 'text-slate-500'}`}>

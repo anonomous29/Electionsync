@@ -46,11 +46,11 @@ export default function VotingSimulator() {
                 className="absolute inset-0 bg-white/95 backdrop-blur-sm z-20 flex flex-col items-center justify-center"
               >
                 <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-4 shadow-inner">
-                  <span className="text-4xl">✅</span>
+                  <span className="text-4xl" role="img" aria-label="Success checkmark">✅</span>
                 </div>
                 <h3 className="text-2xl font-bold text-slate-800">Vote Recorded</h3>
                 <p className="text-slate-500 mt-2 font-medium">BEEEEEP!</p>
-                <button onClick={reset} className="mt-8 bg-slate-800 text-white px-6 py-2 rounded-full font-bold shadow-md hover:bg-slate-700 transition-all">Simulate Again</button>
+                <button onClick={reset} aria-label="Simulate EVM again" className="mt-8 bg-slate-800 text-white px-6 py-2 rounded-full font-bold shadow-md hover:bg-slate-700 transition-all focus:outline-none focus:ring-4 focus:ring-slate-300">Simulate Again</button>
               </motion.div>
             )}
           </AnimatePresence>
@@ -59,7 +59,7 @@ export default function VotingSimulator() {
             {CANDIDATES.map((candidate) => (
               <div key={candidate.id} className="flex items-center bg-white rounded-xl border border-slate-200 p-3 shadow-sm hover:border-blue-300 transition-colors">
                 <div className="w-10 h-10 flex items-center justify-center bg-slate-100 rounded text-xl mr-4 border border-slate-200 shadow-inner">
-                  {candidate.symbol}
+                  <span role="img" aria-hidden="true">{candidate.symbol}</span>
                 </div>
                 <div className="flex-1">
                   <h4 className="font-bold text-slate-800 text-lg leading-tight">{candidate.name}</h4>
@@ -96,7 +96,7 @@ export default function VotingSimulator() {
                     transition={{ duration: 1.5, ease: "easeOut" }}
                     className="absolute top-2 left-2 right-2 bg-white/95 p-3 shadow-inner border border-slate-300 flex flex-col items-center"
                   >
-                    <span className="text-4xl mb-2">{votedCandidateData.symbol}</span>
+                    <span className="text-4xl mb-2" role="img" aria-hidden="true">{votedCandidateData.symbol}</span>
                     <span className="text-sm font-extrabold text-black text-center leading-tight">{votedCandidateData.name}</span>
                     <span className="text-[10px] text-slate-600 text-center uppercase mt-1 font-bold">{votedCandidateData.party}</span>
                   </motion.div>

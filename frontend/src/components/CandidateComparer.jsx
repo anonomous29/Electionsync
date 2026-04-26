@@ -56,13 +56,25 @@ export default function CandidateComparer() {
     setQuery('');
     setIsTyping(true);
 
-    setTimeout(() => {
-      setChatLog(prev => [...prev, { 
-        sender: 'ai', 
-        text: "Based on the manifestos: Aditi Sharma emphasizes physical infrastructure like metro lines. Rajesh Patil focuses on green energy. Sunita Deshmukh prioritizes public parks and tree planting. Choose based on whether you prefer transit, energy, or green spaces!"
-      }]);
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/ask-ai`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: query })
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok && data.answer) {
+        setChatLog(prev => [...prev, { sender: 'ai', text: data.answer }]);
+      } else {
+        setChatLog(prev => [...prev, { sender: 'ai', text: "Sorry, the AI is currently unavailable." }]);
+      }
+    } catch (error) {
+      setChatLog(prev => [...prev, { sender: 'ai', text: "Failed to connect to the AI service." }]);
+    } finally {
       setIsTyping(false);
-    }, 2000);
+    }
   };
 
   return (
@@ -80,9 +92,10 @@ export default function CandidateComparer() {
             <button
               key={topic.id}
               onClick={() => setActiveTopic(topic.id)}
-              className={`flex items-center gap-2 px-6 py-3 rounded-full font-semibold transition-all duration-300 ${isActive ? 'bg-slate-800 text-white shadow-lg scale-105' : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'}`}
+              aria-pressed={isActive}
+              className={`flex items-center gap-2 px-6 py-3 rounded-full font-semibold transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-slate-300 ${isActive ? 'bg-slate-800 text-white shadow-lg scale-105' : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'}`}
             >
-              <Icon className="w-5 h-5" />
+              <Icon className="w-5 h-5" aria-hidden="true" />
               {topic.label}
             </button>
           )
@@ -106,12 +119,12 @@ export default function CandidateComparer() {
               
               <div className="bg-slate-50/50 rounded-2xl p-6 border border-slate-100 flex-1 relative overflow-hidden group shadow-inner">
                 <div className="absolute top-0 right-0 -mt-4 -mr-4 opacity-5 group-hover:opacity-10 transition-opacity duration-500">
-                   {activeTopic === 'infra' && <Scale className="w-32 h-32" />}
-                   {activeTopic === 'health' && <HeartPulse className="w-32 h-32" />}
-                   {activeTopic === 'edu' && <GraduationCap className="w-32 h-32" />}
+                   {activeTopic === 'infra' && <Scale className="w-32 h-32" aria-hidden="true" />}
+                   {activeTopic === 'health' && <HeartPulse className="w-32 h-32" aria-hidden="true" />}
+                   {activeTopic === 'edu' && <GraduationCap className="w-32 h-32" aria-hidden="true" />}
                 </div>
                 <div className="flex items-start gap-4 relative z-10">
-                  <CheckCircle2 className={`w-7 h-7 flex-shrink-0 mt-0.5 ${candidate.id === 1 ? 'text-orange-500' : candidate.id === 2 ? 'text-blue-500' : 'text-green-500'}`} />
+                  <CheckCircle2 className={`w-7 h-7 flex-shrink-0 mt-0.5 ${candidate.id === 1 ? 'text-orange-500' : candidate.id === 2 ? 'text-blue-500' : 'text-green-500'}`} aria-hidden="true" />
                   <p className="text-slate-700 text-lg leading-relaxed font-medium">
                     {candidate.promises[activeTopic]}
                   </p>
@@ -125,21 +138,21 @@ export default function CandidateComparer() {
       {/* AI Assistant Section */}
       <div className="max-w-3xl mx-auto glass-card p-6 border-indigo-100 shadow-[0_8px_30px_rgba(79,70,229,0.1)]">
         <div className="flex items-center gap-2 mb-4 border-b border-slate-100 pb-4">
-          <Sparkles className="w-6 h-6 text-indigo-500" />
+          <Sparkles className="w-6 h-6 text-indigo-500" aria-hidden="true" />
           <h3 className="text-xl font-bold text-slate-800">Ask the AI Assistant</h3>
         </div>
         
         <div className="h-48 overflow-y-auto mb-4 pr-2 space-y-4">
           {chatLog.length === 0 && (
             <div className="h-full flex flex-col items-center justify-center text-slate-400">
-              <Bot className="w-12 h-12 mb-2 opacity-50" />
+              <Bot className="w-12 h-12 mb-2 opacity-50" aria-hidden="true" />
               <p>Ask a question like "Who is best for the environment?"</p>
             </div>
           )}
           {chatLog.map((msg, idx) => (
             <div key={idx} className={`flex items-start gap-3 ${msg.sender === 'user' ? 'flex-row-reverse' : ''}`}>
               <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${msg.sender === 'user' ? 'bg-blue-100 text-blue-600' : 'bg-indigo-100 text-indigo-600'}`}>
-                {msg.sender === 'user' ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
+                {msg.sender === 'user' ? <User className="w-4 h-4" aria-hidden="true" /> : <Bot className="w-4 h-4" aria-hidden="true" />}
               </div>
               <div className={`p-3 rounded-2xl max-w-[80%] ${msg.sender === 'user' ? 'bg-blue-600 text-white rounded-tr-none' : 'bg-slate-100 text-slate-700 rounded-tl-none'}`}>
                 <p className="text-sm font-medium leading-relaxed">{msg.text}</p>
@@ -149,7 +162,7 @@ export default function CandidateComparer() {
           {isTyping && (
             <div className="flex items-start gap-3">
               <div className="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center flex-shrink-0">
-                <Bot className="w-4 h-4" />
+                <Bot className="w-4 h-4" aria-hidden="true" />
               </div>
               <div className="p-4 rounded-2xl bg-slate-100 rounded-tl-none flex gap-1">
                 <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce"></div>
@@ -165,6 +178,7 @@ export default function CandidateComparer() {
           <input 
             type="text" 
             placeholder="Ask about the candidates..." 
+            aria-label="Ask the AI about the candidates"
             className="w-full bg-slate-50 border border-slate-200 rounded-full py-3 pl-5 pr-12 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-colors"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
@@ -172,9 +186,10 @@ export default function CandidateComparer() {
           <button 
             type="submit" 
             disabled={!query.trim() || isTyping}
-            className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full flex items-center justify-center transition-colors disabled:opacity-50"
+            aria-label="Send message to AI"
+            className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full flex items-center justify-center transition-colors disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
           >
-            <Send className="w-4 h-4 ml-0.5" />
+            <Send className="w-4 h-4 ml-0.5" aria-hidden="true" />
           </button>
         </form>
       </div>

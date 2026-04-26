@@ -35,10 +35,11 @@ export default function BoothLocator() {
         
         <form onSubmit={handleSearch} className="relative flex gap-3 mb-8">
           <div className="relative flex-1">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" aria-hidden="true" />
             <input 
               type="text" 
               placeholder="Enter PIN (e.g. 400001)" 
+              aria-label="Enter PIN code or Voter ID"
               className="w-full pl-12 pr-4 py-4 rounded-2xl bg-white/50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-civic-primary focus:bg-white transition-all text-lg"
               value={zip}
               onChange={(e) => setZip(e.target.value)}
@@ -47,7 +48,8 @@ export default function BoothLocator() {
           <button 
             type="submit" 
             disabled={loading || !zip}
-            className="bg-civic-primary hover:bg-blue-700 text-white px-8 py-4 rounded-2xl font-semibold shadow-lg shadow-blue-500/30 transition-all disabled:opacity-50 active:scale-95 flex items-center justify-center min-w-[140px]"
+            aria-label="Locate polling booth"
+            className="bg-civic-primary hover:bg-blue-700 text-white px-8 py-4 rounded-2xl font-semibold shadow-lg shadow-blue-500/30 transition-all disabled:opacity-50 active:scale-95 flex items-center justify-center min-w-[140px] focus:outline-none focus:ring-4 focus:ring-blue-300"
           >
             {loading ? <span className="animate-pulse">Searching...</span> : "Locate"}
           </button>
@@ -61,19 +63,19 @@ export default function BoothLocator() {
               className="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100 rounded-2xl p-6 flex flex-col md:flex-row gap-6 items-center shadow-inner"
             >
               <div className="w-16 h-16 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center flex-shrink-0 shadow-sm">
-                <MapPin className="w-8 h-8" />
+                <MapPin className="w-8 h-8" aria-hidden="true" />
               </div>
               <div className="flex-1 text-center md:text-left">
                 <div className="flex items-center justify-center md:justify-start gap-2 mb-1">
                   <span className="bg-blue-600 text-white text-xs font-bold px-2 py-0.5 rounded-full">Booth {result.boothNo}</span>
-                  <span className="text-sm font-medium text-blue-600 flex items-center gap-1"><Navigation2 className="w-3 h-3" /> {result.distance}</span>
+                  <span className="text-sm font-medium text-blue-600 flex items-center gap-1"><Navigation2 className="w-3 h-3" aria-hidden="true" /> {result.distance}</span>
                 </div>
                 <h3 className="text-xl font-bold text-slate-800">{result.name}</h3>
                 <p className="text-slate-600 flex items-center justify-center md:justify-start gap-1 mt-1">
-                  <Building2 className="w-4 h-4" /> {result.address}
+                  <Building2 className="w-4 h-4" aria-hidden="true" /> {result.address}
                 </p>
               </div>
-              <button className="w-full md:w-auto mt-4 md:mt-0 bg-white border border-slate-200 hover:border-blue-300 text-slate-700 hover:text-blue-600 font-medium py-2.5 px-6 rounded-xl shadow-sm transition-all">
+              <button aria-label="Get directions to polling booth" className="w-full md:w-auto mt-4 md:mt-0 bg-white border border-slate-200 hover:border-blue-300 text-slate-700 hover:text-blue-600 font-medium py-2.5 px-6 rounded-xl shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-blue-300">
                 Get Directions
               </button>
             </motion.div>
