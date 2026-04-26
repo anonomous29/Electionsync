@@ -40,7 +40,7 @@ def get_ai_model():
         api_key = os.environ.get("GEMINI_API_KEY")
         if api_key:
             genai.configure(api_key=api_key)
-            AI_MODEL = genai.GenerativeModel('gemini-1.5-flash')
+            AI_MODEL = genai.GenerativeModel('gemini-2.0-flash')
     return AI_MODEL
 
 @app.route('/api/deadlines', methods=['GET'])
