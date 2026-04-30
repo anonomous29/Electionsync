@@ -1,4 +1,4 @@
-export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+export const API_BASE_URL = '';
 export const ENDPOINTS = {
   LOCATE: `${API_BASE_URL}/api/locate`,
   VALIDATE_ID: `${API_BASE_URL}/api/validate-id`,
