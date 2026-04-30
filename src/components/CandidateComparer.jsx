@@ -125,14 +125,14 @@ export default function CandidateComparer() {
             <label className="block text-sm font-semibold text-slate-300 mb-2">Party A (Text Summary or URL)</label>
             <div className="relative">
               <Link className="absolute left-3 top-3.5 w-5 h-5 text-slate-500" />
-              <input type="text" required value={partyAUrl} onChange={(e) => setPartyAUrl(e.target.value)} className="w-full bg-slate-800/50 border border-slate-600 rounded-xl py-3 pl-10 pr-4 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="e.g. https://party-a.org/manifesto.pdf" />
+              <input type="text" aria-label="Party A URL or Text" required value={partyAUrl} onChange={(e) => setPartyAUrl(e.target.value)} className="w-full bg-slate-800/50 border border-slate-600 rounded-xl py-3 pl-10 pr-4 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="e.g. https://party-a.org/manifesto.pdf" />
             </div>
           </div>
           <div>
             <label className="block text-sm font-semibold text-slate-300 mb-2">Party B (Text Summary or URL)</label>
             <div className="relative">
               <Link className="absolute left-3 top-3.5 w-5 h-5 text-slate-500" />
-              <input type="text" required value={partyBUrl} onChange={(e) => setPartyBUrl(e.target.value)} className="w-full bg-slate-800/50 border border-slate-600 rounded-xl py-3 pl-10 pr-4 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="e.g. https://party-b.org/manifesto.pdf" />
+              <input type="text" aria-label="Party B URL or Text" required value={partyBUrl} onChange={(e) => setPartyBUrl(e.target.value)} className="w-full bg-slate-800/50 border border-slate-600 rounded-xl py-3 pl-10 pr-4 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="e.g. https://party-b.org/manifesto.pdf" />
             </div>
           </div>
           <div className="md:col-span-2 flex justify-end mt-2 items-center">

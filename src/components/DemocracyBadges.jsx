@@ -62,6 +62,10 @@ export default function DemocracyBadges() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: idx * 0.1 }}
                 onClick={() => toggleBadge(badge.id)}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') toggleBadge(badge.id); }}
+                role="button"
+                tabIndex={0}
+                aria-label={`Toggle ${badge.title} badge`}
                 className={`relative p-5 rounded-2xl border-2 cursor-pointer transition-all duration-300 flex flex-col items-center text-center gap-3
                   ${isUnlocked ? `${badge.bg} ${badge.border} hover:shadow-lg hover:-translate-y-1` : 'bg-slate-800/50 border-slate-700/50 hover:bg-slate-800'}
                 `}

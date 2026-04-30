@@ -226,6 +226,7 @@ def decode_manifesto():
         model = genai.GenerativeModel('gemini-2.0-flash-lite')
         prompt = f"""
         Extract the key promises from the following two political manifestos (or summaries) regarding 3 topics: Infrastructure, Healthcare, and Education.
+        For each topic, provide a 3-point 'Civic Impact Summary'.
         
         Party A: {party_a[:2000]}
         Party B: {party_b[:2000]}
@@ -234,9 +235,9 @@ def decode_manifesto():
         {{
             "partyA_name": "Name of Party A (guess if not explicit)",
             "partyB_name": "Name of Party B (guess if not explicit)",
-            "infra": {{"partyA": "1 sentence summary", "partyB": "1 sentence summary"}},
-            "health": {{"partyA": "1 sentence summary", "partyB": "1 sentence summary"}},
-            "edu": {{"partyA": "1 sentence summary", "partyB": "1 sentence summary"}}
+            "infra": {{"partyA": "1. ... 2. ... 3. ...", "partyB": "1. ... 2. ... 3. ..."}},
+            "health": {{"partyA": "1. ... 2. ... 3. ...", "partyB": "1. ... 2. ... 3. ..."}},
+            "edu": {{"partyA": "1. ... 2. ... 3. ...", "partyB": "1. ... 2. ... 3. ..."}}
         }}
         """
         response = model.generate_content(prompt)
