@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { ShieldCheck, XCircle, Loader2, Share2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
+import { GeminiService } from '../services/GeminiService';
+import { ENDPOINTS } from '../config/constants';
 
 const DOCUMENTS = [
   { id: 'voter_id', label: 'Voter ID (EPIC)' },
@@ -30,12 +32,7 @@ export default function IDChecker() {
       const base64String = reader.result;
       
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/analyze-id-image`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ image: base64String })
-        });
-        const data = await response.json();
+        const data = await GeminiService.analyzeImage(base64String);
         
         if (data.detected && data.detected !== 'none') {
           if (!selectedDocs.includes(data.detected)) {
@@ -91,7 +88,7 @@ export default function IDChecker() {
   const checkEligibility = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/validate-id`, {
+      const response = await fetch(ENDPOINTS.VALIDATE_ID, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ documents: selectedDocs })
@@ -179,6 +176,7 @@ export default function IDChecker() {
             {result && (
               <motion.div 
                 initial={{ opacity: 0, y: 10, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}
+                role="region" aria-live="polite"
                 className={`mt-8 p-6 rounded-2xl w-full flex flex-col md:flex-row items-center md:items-start gap-4 border shadow-inner ${result.valid ? 'bg-green-50/80 border-green-200 text-green-800' : 'bg-red-50/80 border-red-200 text-red-800'}`}
               >
                 {result.valid ? <ShieldCheck className="w-8 h-8 flex-shrink-0 text-green-600" aria-hidden="true" /> : <XCircle className="w-8 h-8 flex-shrink-0 text-red-600" aria-hidden="true" />}

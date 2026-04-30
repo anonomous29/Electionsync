@@ -1,6 +1,7 @@
 
 import { useTranslation } from 'react-i18next';
 import LiveAlerts from './components/LiveAlerts';
+import DemocracyBadges from './components/DemocracyBadges';
 import SmartTimeline from './components/SmartTimeline';
 import IDChecker from './components/IDChecker';
 import VotingSimulator from './components/VotingSimulator';
@@ -78,6 +79,7 @@ function App() {
           </motion.div>
         </div>
 
+        <div id="badges"><DemocracyBadges /></div>
         <div id="timeline"><SmartTimeline /></div>
         <div id="locator"><BoothLocator /></div>
         <div id="checker"><IDChecker /></div>

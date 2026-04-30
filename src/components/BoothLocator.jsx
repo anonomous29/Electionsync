@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MapPin, Search, Navigation2, Building2 } from 'lucide-react';
+import { ENDPOINTS } from '../config/constants';
 
 export default function BoothLocator() {
   const [zip, setZip] = useState('');
@@ -9,13 +10,14 @@ export default function BoothLocator() {
 
   const handleSearch = async (e) => {
     e.preventDefault();
-    if (!zip) return;
+    const sanitizedZip = zip.replace(/[^a-zA-Z0-9\s-]/g, '').trim();
+    if (!sanitizedZip) return;
     setLoading(true);
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/locate`, {
+      const res = await fetch(ENDPOINTS.LOCATE, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ zip })
+        body: JSON.stringify({ zip: sanitizedZip })
       });
       if (res.ok) {
         const data = await res.json();
@@ -73,6 +75,8 @@ export default function BoothLocator() {
             <motion.div 
               initial={{ opacity: 0, y: 20, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
+              role="region"
+              aria-live="polite"
               className="bg-gradient-to-br from-slate-800 to-indigo-900/40 border border-slate-700 rounded-2xl p-6 flex flex-col md:flex-row gap-6 items-center shadow-inner"
             >
               <div className="w-16 h-16 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center flex-shrink-0 shadow-sm">

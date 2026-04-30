@@ -199,5 +199,58 @@ def analyze_id_image():
         print(f"Error calling Gemini Vision API: {e}")
         return jsonify({"error": "Failed to analyze image"}), 500
 
+@app.route('/api/decode-manifesto', methods=['POST'])
+def decode_manifesto():
+    data = request.get_json()
+    if not data:
+        return jsonify({"error": "No JSON payload provided"}), 400
+        
+    party_a = data.get('partyA')
+    party_b = data.get('partyB')
+
+    if not party_a or not party_b:
+        return jsonify({"error": "Missing party A or B input"}), 400
+
+    api_key = os.environ.get("GEMINI_API_KEY")
+    if not api_key:
+        return jsonify({
+            "partyA_name": "Uploaded Party A",
+            "partyB_name": "Uploaded Party B",
+            "infra": {"partyA": "Plans to build 100km of new roads.", "partyB": "Focuses on repairing existing bridges."},
+            "health": {"partyA": "Promises 5 new hospitals.", "partyB": "Promises free medical insurance."},
+            "edu": {"partyA": "Free laptops for students.", "partyB": "Free college tuition."}
+        })
+    
+    try:
+        genai.configure(api_key=api_key)
+        model = genai.GenerativeModel('gemini-2.0-flash-lite')
+        prompt = f"""
+        Extract the key promises from the following two political manifestos (or summaries) regarding 3 topics: Infrastructure, Healthcare, and Education.
+        
+        Party A: {party_a[:2000]}
+        Party B: {party_b[:2000]}
+        
+        Return the result EXACTLY as a JSON object with this structure (no markdown formatting, just pure JSON):
+        {{
+            "partyA_name": "Name of Party A (guess if not explicit)",
+            "partyB_name": "Name of Party B (guess if not explicit)",
+            "infra": {{"partyA": "1 sentence summary", "partyB": "1 sentence summary"}},
+            "health": {{"partyA": "1 sentence summary", "partyB": "1 sentence summary"}},
+            "edu": {{"partyA": "1 sentence summary", "partyB": "1 sentence summary"}}
+        }}
+        """
+        response = model.generate_content(prompt)
+        text = response.text.strip()
+        if text.startswith('```json'):
+            text = text[7:-3]
+        elif text.startswith('```'):
+            text = text[3:-3]
+            
+        import json
+        return jsonify(json.loads(text.strip()))
+    except Exception as e:
+        print(f"Error decoding manifesto: {e}")
+        return jsonify({"error": "Failed to decode manifestos via AI"}), 500
+
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
