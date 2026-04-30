@@ -1,35 +1,16 @@
-# VoteWise Election Assistant
+# React + Vite
 
-VoteWise is a Civic Tech web application designed to guide voters from registration through Election Day. It reduces voter anxiety and ensures high preparedness by offering dynamic timelines, interactive ID checklists, and a simulated voting booth experience.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-## Features
-- **Live Alerts Banner**: Pulls real-time/mock data for upcoming local election deadlines.
-- **Smart Timeline**: A Framer Motion-powered vertical stepper tracking the election journey.
-- **Interactive ID Checker**: Fulfills the "Are you ready?" requirement by checking valid document combinations.
-- **Mock Voting Simulator**: A mini-component mimicking an EVM/Ballot UI.
+Currently, two official plugins are available:
 
-## Tech Stack
-- **Frontend**: React, Vite, Tailwind CSS, Framer Motion, Lucide React
-- **Backend**: Python, Flask
-- **Deployment**: Docker, Gunicorn
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-## Setup Instructions
+## React Compiler
 
-### Frontend
-1. `cd frontend`
-2. `npm install`
-3. `npm run dev`
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-### Backend
-1. `cd backend`
-2. `python -m venv venv`
-3. Activate virtual environment (`.\venv\Scripts\activate` on Windows, `source venv/bin/activate` on Mac/Linux)
-4. `pip install -r requirements.txt`
-5. `python app.py`
+## Expanding the ESLint configuration
 
-## Testing
-- Run backend unit tests: `python tests.py` inside the `backend` directory.
-
-## Production Build
-A `docker-compose.yml` and `Dockerfile`s are provided for a production-ready setup.
-Run `docker-compose up --build` to start the entire application suite.
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
